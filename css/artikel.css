@@ -1,0 +1,182 @@
+/* navbar search */
+.navbar .search-box {
+  flex: 1;
+  position: relative;
+}
+
+.navbar .hamburger a {
+  color: black;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  width: 90%;
+  height: 40px;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
+  color: gray;
+  border-radius: 2rem;
+  margin-left: 3rem;
+  text-align: center;
+  opacity: 0.5;
+}
+
+.search-box button {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 30px;
+  border: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: scale(0.9);
+  background-color: var(--primary);
+  margin-right: 0.3rem;
+}
+
+/* kategori */
+.kategori {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  justify-content: space-evenly;
+}
+
+.kategori .sub-kategori {
+  border: 3px solid var(--primary);
+  background-color: var(--primary);
+  border-radius: 15px;
+  padding: 1.2rem 2rem;
+  margin: 1rem 1rem;
+}
+
+.kategori a {
+  text-decoration: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.kategori a:hover {
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
+  transition: 0.2s;
+}
+
+/* About Me Section */
+
+.tentang {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30vh;
+  margin-bottom: 1rem;
+  width: 1100px;
+  margin-left: 50%;
+  margin-top: 10rem;
+  transform: translate(-50%, -50%);
+}
+
+.tentang-kami {
+  margin-top: 4rem;
+}
+
+.tentang p {
+  color: var(--sec);
+  text-align: center;
+  line-height: 1.5rem;
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin-top: 1rem;
+}
+
+.selebihnya {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.selebihnya a {
+  text-decoration: none;
+  display: inline-block;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--bg);
+  background-color: var(--primary);
+  border: 4px solid var(--primary);
+  border-radius: 5px;
+}
+
+
+.selebihnya a:hover {
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
+  transition: 0.2s;
+}
+
+.detail-artikel {
+  margin-top: 10rem;
+  display: flex;
+  justify-content: center;
+}
+
+.detail-artikel h3 {
+  color: black;
+  font-size: 1.4rem;
+}
+
+.container-main {
+  display: inline-block;
+  margin-top: 5rem;
+}
+
+.main {
+
+  width: 70%;
+  margin: 0 auto;
+}
+
+.main p {
+  color: black;
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
+
+/* laptop */
+@media (max-width: 1366px) {
+  .tentang {
+    width: 700px;
+  }
+}
+
+/* tablet */
+@media (max-width: 768px) {
+  .search-box input {
+    width: 80%;
+  }
+
+  .search-box button {
+    margin-right: 7rem;
+  }
+
+  .tentang {
+    width: 500px;
+  }
+}
+
+/* Mobile Phone */
+@media (max-width: 450px) {
+  .search-box input {
+    width: 75%;
+  }
+
+  .search-box button {
+    margin-right: 4rem;
+  }
+
+  .tentang {
+    margin-top: 15rem;
+    width: 300px;
+  }
+}

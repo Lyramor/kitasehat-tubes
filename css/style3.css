@@ -1,0 +1,513 @@
+:root {
+    --primary: #00BFFF;
+    --bg: #ebebeb;
+    --sec: #464646;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    text-decoration: none;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg);
+    color: #fff;
+}
+
+/* navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.4rem 7%;
+    background-color: rgba(241, 241, 241, 0.9);
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+}
+
+.navbar .navbar-logo {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--sec);
+}
+
+.navbar .navbar-logo span {
+    color: var(--primary);
+}
+
+.navbar .navbar-nav a {
+    color: var(--sec);
+    display: inline-block;
+    font-size: 1.2rem;
+    margin: 0 1.55rem;
+}
+
+.navbar .navbar-nav a:hover {
+    color: var(--primary);
+    transition: 0.4s;
+    transform: translateY(-10%);
+}
+
+.navbar #hambuger {
+    color: var(--primary);
+    font-size: 1.2rem;
+    font-weight: 600;
+    border: 3px solid var(--primary);
+    padding: 0.4rem 1rem;
+    border-radius: 13px;
+}
+
+.navbar #hamburger:hover {
+    color: var(--bg);
+    background-color: var(--primary);
+    transition: 0.2s;
+}
+
+.navbar #hamburger {
+    color: var(--sec);
+    display: none;
+}
+
+.navbar #hamburger:hover {
+    color: var(--primary);
+}
+
+.navbar .navbar-nav #login {
+    padding: 0.5rem 1.2rem;
+    color: var(--primary);
+    border: 3px solid var(--primary);
+    font-weight: 600;
+    border-radius: 15px;
+}
+
+.navbar .navbar-nav #login:hover {
+    color: var(--bg);
+    background-color: var(--primary);
+}
+
+
+/* Hero Section */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background-image: url('../css/image/main.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.hero::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 30%;
+    bottom: 0;
+    background: linear-gradient(0deg, rgba(235, 235, 235, 1) 1%, rgba(241, 241, 241, 0) 10%);
+}
+
+.hero .content {
+    padding: 1.4rem 7%;
+    max-width: 60rem;
+}
+
+.hero .content h1 {
+    font-size: 4rem;
+    color: var(--bg);
+    text-shadow: 1px 1px 3px rgba(1, 1, 3, 0.5);
+}
+
+.hero .content h1 span {
+    color: var(--primary);
+}
+
+.hero .content p {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    line-height: 1.3;
+    text-shadow: 1px 1px 3px rgba(1, 1, 3, 0.5);
+    font-weight: 200;
+    mix-blend-mode: difference;
+}
+
+.hero .content .cta {
+    margin-top: 1rem;
+    display: inline-block;
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary);
+    background-color: var(--bg);
+    border: 4px solid var(--primary);
+    border-radius: 5px;
+}
+
+.hero .content a:hover {
+    color: var(--bg);
+    background-color: var(--primary);
+    transition: 0.2s;
+}
+
+.layanan,
+.artikel,
+.kontak {
+    padding: 5rem 7% 1.4rem;
+    text-shadow: 1px 1px 3px rgba(1, 1, 3, 0.2);
+}
+
+.layanan h2,
+.artikel h2,
+.kontak h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    color: var(--sec);
+}
+
+.layanan h2 span {
+    color: var(--primary);
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+    justify-content: space-evenly;
+}
+
+.row .bg {
+    border: 3px solid var(--sec);
+    border-radius: 15px;
+    width: 7rem;
+    height: 11rem;
+    margin: 1rem 2rem;
+}
+
+.row .bg:hover {
+    transition: 0.2s;
+    box-shadow: 8px 8px 5px rgba(0, 0, 0, 0.3);
+}
+
+.card {
+    background-color: var(--primary);
+    width: 5rem;
+    height: 5rem;
+    text-align: center;
+    border-radius: 50%;
+    margin: 1rem auto;
+}
+
+
+.row .card .icon {
+    padding: 1rem;
+}
+
+.row .card h4 {
+    color: var(--sec);
+    margin: 1rem auto 0.5rem;
+}
+
+
+
+/* artikel section */
+.lainnya {
+    width: 90%;
+    margin: 0 auto;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.lainnya h2 {
+    color: var(--sec);
+    display: block;
+    margin: 5rem 0 3rem 0;
+    text-shadow: 1px 1px 3px rgba(1, 1, 3, 0.2);
+    border-bottom: 1px dotted rgba(1, 1, 3, 0.5);
+    padding-bottom: 0.3rem;
+}
+
+.lainnya-page {
+    border-bottom: 1px dashed rgba(1, 1, 3, 0.5);
+    width: 65%;
+    display: flex;
+    height: 250px;
+}
+
+.lainnya-page .lainnya-img {
+    flex: 1 1 7rem;
+    margin: 1rem 0 0 1rem;
+}
+
+.lainnya-page .lainnya-img img {
+    width: 200px;
+    height: 200px;
+    border-radius: 5px;
+}
+
+.lainnya-page .content {
+    flex: 1 1 35rem;
+    margin-top: 1rem;
+    padding: 0 1rem;
+    color: var(--sec);
+    float: right;
+}
+
+.lainnya-page .content p {
+    margin-top: 1rem;
+    margin-bottom: 1.4rem;
+    font-weight: 500;
+}
+
+.lainnya-page .content a {
+    color: var(--primary);
+}
+
+.lainnya-page .content a:hover {
+    color: var(--sec);
+    text-decoration: underline;
+}
+
+/* Kontak Section */
+.doctor {
+    border-radius: 15px;
+    height: 21.5rem;
+    width: 16rem;
+    color: #ffffff;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+    margin-top: 2rem;
+}
+
+.doctor .doctor-img img {
+    width: 100%;
+    height: 12rem;
+    border-radius: 15px 15px 0 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.doctor h3,
+.doctor p {
+    color: var(--sec);
+    margin-top: 0.5rem;
+    margin-left: 7px;
+}
+
+.doctor a {
+    display: inline-block;
+    padding: 0.2rem 0.8rem;
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--primary);
+    background-color: var(--bg);
+    border: 3px solid var(--primary);
+    border-radius: 5px;
+    margin: 25px 0 0px 10px;
+}
+
+.doctor a:hover {
+    color: var(--bg);
+    background-color: var(--primary);
+    transition: 0.2s;
+}
+
+/* footer Section */
+.footer {
+    background-color: #242424;
+    margin-top: 5rem;
+}
+
+.footer .box-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.footer .box-container .box {
+    flex: 1 1 5rem;
+    padding: 1.5rem 0;
+}
+
+.footer .box-container .box h3 {
+    color: var(--bg);
+    font-size: 1.5rem;
+    padding: 1rem 0;
+}
+
+.footer .box-container .box .link-footer {
+    display: block;
+    color: var(--bg);
+    font-size: 1rem;
+    padding: 1rem 0;
+}
+
+.footer .box-container .box .link-footer:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.footer .box-container .box .navbar-logo {
+    padding-left: 5rem;
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--bg);
+}
+
+.footer .box-container .box .navbar-logo span {
+    color: var(--primary);
+}
+
+.create {
+    padding: 2rem 0 1rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.create a {
+    opacity: 0.6;
+    text-decoration: none;
+    color: var(--bg);
+}
+
+
+
+/* Laptop */
+@media (max-width: 1366px) {
+    html {
+        font-size: 75%;
+    }
+
+    .navbar #hamburger {
+        display: inline-block;
+    }
+
+    .navbar .navbar-nav {
+        position: absolute;
+        top: 100%;
+        right: -100%;
+        background-color: #ebebeb;
+        height: 100vh;
+        width: 30rem;
+        transition: 0.3s;
+    }
+
+    .navbar .navbar-nav.active {
+        right: 0;
+    }
+
+    .navbar .navbar-nav a {
+        color: var(--sec);
+        display: block;
+        margin: 1.5rem;
+        padding: 0.5rem;
+        font-size: 1.5rem;
+    }
+
+    .navbar .navbar-nav #login {
+        text-align: center;
+        border: 4px solid var(--primary);
+        font-weight: 700;
+    }
+
+    .tentang {
+        width: 700px;
+    }
+
+    .lainnya-page {
+        width: 85%;
+    }
+
+    .lainnya-page .lainnya-img img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .doctor {
+        margin: 2rem 1rem;
+    }
+
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    html {
+        font-size: 62.5%;
+    }
+
+    .navbar .navbar-nav #login {
+        margin-top: 4rem;
+    }
+
+    .tentang {
+        width: 500px;
+    }
+
+    .lainnya-page {
+        width: 90%;
+        height: 165px;
+    }
+
+    .lainnya-page .lainnya-img img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .doctor {
+        margin-top: 2rem;
+    }
+}
+
+/* Mobile Phone */
+@media (max-width: 450px) {
+    html {
+        font-size: 55%;
+    }
+
+
+    .tentang {
+        margin-top: 15rem;
+        width: 300px;
+    }
+
+    .artikel-page {
+        height: 31rem;
+        width: 20rem;
+    }
+
+    .artikel-page .artikel-img img {
+        height: 13.5rem;
+    }
+
+    .artikel-page h3,
+    .artikel-page p {
+        font-size: 1.3rem;
+    }
+
+    .artikel-page a {
+        font-size: 1.3rem;
+    }
+
+    .lainnya-page {
+        height: 250px;
+        width: 90%;
+        font-size: 1.1rem;
+    }
+
+    .navbar .navbar-nav a #login {
+        margin-top: 16rem;
+    }
+
+}

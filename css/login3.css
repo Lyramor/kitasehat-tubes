@@ -1,0 +1,162 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+:root {
+  --primary: #00BFFF;
+  --bg: #ebebeb;
+  --sec: #464646;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: var(--primary);
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+
+
+
+.main-container {
+  width: 340px;
+  height: 490px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  position: relative;
+  z-index: 10;
+  background: var(--bg);
+  padding: 15px;
+  box-shadow: 0 0 8px var(--sec);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.container {
+  width: 340px;
+  height: 440px;
+  position: absolute;
+  left: 0;
+  z-index: -1;
+  display: flex;
+  flex-direction: row;
+  transition: all 0.5s ease;
+}
+
+a {
+  text-decoration: none;
+}
+
+.login-container,
+.signup-container {
+  width: 410px;
+  padding: 20px;
+  height: 100%;
+}
+
+#slide:checked~.container {
+  left: -410px;
+  position: absolute;
+}
+
+.container .text {
+  font-size: 35px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+}
+
+.container form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.container form .data {
+  height: 45px;
+  width: 100%;
+  margin: 20px 0;
+}
+
+form .data label {
+  font-size: 18px;
+}
+
+form .data input {
+  height: 100%;
+  width: 100%;
+  padding-left: 10px;
+  font-size: 17px;
+  border: 1px solid silver;
+  outline: none;
+  border-radius: 2px;
+}
+
+.data input:focus {
+  border-color: var(--primary);
+  border-bottom-width: 2.5px;
+}
+
+form .btn-login {
+  margin: 52px 0 20px 0;
+  width: 100%;
+  height: 45px;
+}
+
+form .btn-signup {
+  margin: 20px 0;
+  height: 45px;
+  width: 100%;
+}
+
+form .btn-login button,
+form .btn-signup button {
+  height: 100%;
+  width: 100%;
+  background: var(--primary);
+  color: var(--bg);
+  font-size: 18px;
+  font-weight: 500;
+  border: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.btn-login button:hover,
+.btn-signup button:hover {
+  background: var(--bg);
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+form .signup-link {
+  text-align: center;
+}
+
+form .signup-link a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+form .signup-link .slide {
+  cursor: pointer;
+}
+
+form .signup-link a:hover {
+  text-decoration: underline;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
