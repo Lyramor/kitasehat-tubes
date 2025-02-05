@@ -142,6 +142,167 @@
   font-size: 1.1rem;
 }
 
+/* Komentar Section */
+.komentar-section {
+  width: 70%;
+  margin: 2rem auto;
+}
+
+.form-komentar {
+  margin-bottom: 2rem;
+}
+
+.form-komentar textarea {
+  width: 100%;
+  height: 150px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--primary);
+  border-radius: 5px;
+  color: black;
+  /* Ensure text is black */
+}
+
+.form-komentar button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.daftar-komentar .komentar {
+  display: flex;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #ddd;
+  /* Pembatas antar komentar */
+}
+
+.komentar-profil {
+  margin-right: 1rem;
+  text-align: center;
+}
+
+.komentar-profil img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.komentar-isi {
+  flex-grow: 1;
+}
+
+.komentar-isi p {
+  color: black;
+  /* Ensure comment text is black */
+  margin: 0 0 0.5rem 0;
+}
+
+.komentar-isi small {
+  color: gray;
+}
+
+.login-prompt p,
+.login-prompt a {
+  color: black;
+}
+
+.komentar-section .form-komentar textarea,
+.komentar-section .form-komentar textarea::placeholder {
+  color: black;
+}
+
+.daftar-komentar .komentar {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.komentar-section .komentar {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.komentar-profil {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 15px;
+  width: 100px;
+}
+
+.komentar-profil img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.komentar-profil .username {
+  font-weight: bold;
+  text-align: center;
+  color: black;
+}
+
+.komentar-isi {
+  flex-grow: 1;
+}
+
+.komentar-isi p {
+  color: black;
+  margin-bottom: 10px;
+}
+
+.komentar-isi small {
+  color: #666;
+}
+
+.komentar-isi p {
+  color: black;
+}
+
+/* Modal Semua Komentar */
+.modal-komentar {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 80%;
+  max-width: 600px;
+  max-height: 70%;
+  overflow-y: auto;
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
 
 /* laptop */
 @media (max-width: 1366px) {

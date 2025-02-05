@@ -1,6 +1,10 @@
 <?php  
   require "inc/koneksi.php";
 
+  if (!file_exists('../upload/profile')) {
+    mkdir('../upload/profile', 0777, true);
+  }
+
   // Mengambil nilai judul dari parameter GET
   $judul = htmlspecialchars($_GET['judul']); 
 
@@ -9,7 +13,26 @@
   
   // Mengambil hasil query dalam bentuk array
   $artikel = mysqli_fetch_array($queryArtikel); 
+
+  $foto_profil = $komentar['foto_profil'];
+
+  // Debug step: Check the actual value of $foto_profil
+  error_log("Foto profil value: " . print_r($foto_profil, true));
   
+  // Modify the path logic
+  $foto_profil_path = (!empty($foto_profil) && $foto_profil !== NULL) 
+      ? 'css/image/profile/' . $foto_profil 
+      : 'https://bootdey.com/img/Content/avatar/avatar1.png';
+  
+  // Add additional debug logging
+  error_log("Generated foto_profil_path: " . $foto_profil_path);
+  
+  // Add an additional check before displaying
+  if (!file_exists($foto_profil_path)) {
+      $foto_profil_path = 'css/image/profile/';
+      error_log("Profile image not found, using default: " . $foto_profil_path);
+  }
+
 ?>
 
 <!DOCTYPE html>
@@ -26,8 +49,8 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- css -->
-  <link rel="stylesheet" href="css/style3.css">
-  <link rel="stylesheet" href="css/artikel.css">
+  <link rel="stylesheet" href="css/style2.css">
+  <link rel="stylesheet" href="css/artikel1.css">
 
 
   <title>kitasehat | Artikel</title>
@@ -88,43 +111,180 @@
     </div>
   <!-- artikel section end-->
 
+  <!-- Komentar Section Start -->
+  <section id="komentar" class="komentar-section">
+      <div class="komentar-container">
+          <h3>Komentar</h3>
 
+          <?php
 
-  <!--footer Section start -->
-  <section class="footer">
-    <div class="box-container">
-      <div class="box">
-        <a href="#" class="navbar-logo">
-          Kita<span>Sehat</span>.
-        </a>
+  function get_profile_image_path($foto_profil) {
+    $possible_paths = [
+        'upload/profile/' . $foto_profil,
+        'assets/default-profile.png'
+    ];
+    
+    foreach ($possible_paths as $path) {
+        if (!empty($foto_profil) && file_exists($path)) {
+            return $path;
+        }
+    }
+    
+    return 'assets/default-profile.png';
+  }
+
+        // Cek apakah user sudah login
+        if (isset($_SESSION['login']) && $_SESSION['login'] === true):
+        ?>
+            <!-- Form Komentar -->
+            <form action="inc/proses_komentar.php" method="POST" class="form-komentar">
+                <textarea name="isi_komentar" placeholder="Tulis komentar Anda..." required></textarea>
+                <input type="hidden" name="artikel_id" value="<?php echo $artikel['id']; ?>">
+                <input type="hidden" name="judul" value="<?php echo htmlspecialchars($artikel['judul']); ?>">
+                <button type="submit">Kirim Komentar</button>
+            </form>
+        <?php else: ?>
+            <!-- Jika belum login -->
+            <div class="login-prompt">
+                <p>Silakan <a href="login.php">login</a> terlebih dahulu untuk memberikan komentar.</p>
+            </div>
+        <?php endif; ?>
+
+        <!-- Daftar Komentar -->
+        <div class="daftar-komentar">
+            <?php
+            // Hitung total komentar untuk artikel ini
+            $stmt_count = $conn->prepare("SELECT COUNT(*) as total_comments FROM komentar WHERE artikel_id = ?");
+            $stmt_count->bind_param("i", $artikel['id']);
+            $stmt_count->execute();
+            $result_count = $stmt_count->get_result();
+            $total_comments = $result_count->fetch_assoc()['total_comments'];
+
+            // Ambil 5 komentar terbaru
+            $query_komentar = "SELECT k.*, u.username, u.foto_profil 
+                              FROM komentar k 
+                              JOIN users u ON k.user_id = u.id 
+                              WHERE k.artikel_id = ? 
+                              ORDER BY k.created_at DESC 
+                              LIMIT 5";
+            
+            $stmt = $conn->prepare($query_komentar);
+            $stmt->bind_param("i", $artikel['id']);
+            $stmt->execute();
+            $result_komentar = $stmt->get_result();
+            
+            if ($result_komentar->num_rows > 0):
+                while ($komentar = $result_komentar->fetch_assoc()):
+                    // Tentukan path foto profil
+                    $foto_profil = $komentar['foto_profil'];
+                    $foto_profil_path = !empty($foto_profil) ? 'css/image/profile/' . $foto_profil :  'https://bootdey.com/img/Content/avatar/avatar1.png';
+            ?>
+                    <div class="komentar">
+                        <div class="komentar-profil">
+                            <img src="<?php echo htmlspecialchars($foto_profil_path); ?>" alt="Foto Profil">
+                            <span class="username"><?php echo htmlspecialchars($komentar['username']); ?></span>
+                        </div>
+                        <div class="komentar-isi">
+                            <p><?php echo htmlspecialchars($komentar['isi']); ?></p>
+                            <small><?php echo date('d M Y H:i', strtotime($komentar['created_at'])); ?></small>
+                        </div>
+                    </div>
+            <?php 
+                endwhile;
+            else:
+                echo "<p>Belum ada komentar.</p>";
+            endif;
+            ?>
+        </div>
+
+        <!-- Tombol Lihat Semua Komentar -->
+        <?php if ($total_comments > 5): ?>
+          <div class="lihat-semua-komentar">
+            <button id="btn-semua-komentar" data-artikel-id="<?php echo $artikel['id']; ?>">
+                Lihat Semua Komentar (<?php echo $total_comments; ?>)
+            </button>
+          </div>
+        <?php endif; ?>
       </div>
-      <div class="box">
-        <h3>Quick Links</h3>
-        <a href="#" class="link-footer">Beranda</a>
-        <a href="#" class="link-footer">Layanan Kami</a>
-        <a href="#" class="link-footer">Artikel</a>
-        <a href="#" class="link-footer">Kontak</a>
-      </div>
-      <div class="box">
-        <h3>Site Map</h3>
-        <a href="#" class="link-footer">FAQ</a>
-        <a href="#" class="link-footer">Blog</a>
-        <a href="#" class="link-footer">Syarat & Ketentuan</a>
-        <a href="#" class="link-footer">Kebijakan Privasi</a>
-        <a href="#" class="link-footer">Karir</a>
-        <a href="#" class="link-footer">Securty</a>
-      </div>
-      <div class="box">
-        <h3>Social Media</h3>
-        <a href="https://www.instagram.com/mmarsanj?igsh=MTN2MTM2YWZ3a3do" class="link-footer">Instagram</a>
-        <a href="#" class="link-footer">Twitter</a>
-        <a href="#" class="link-footer">Facebook</a>
-      </div>
-    </div>
   </section>
-  <!-- Footer Section End -->
+  <!-- Komentar Section End -->
 
-  <script src="js/script.js"></script>
+
+    <!-- footer Section start -->
+    <section class="footer">
+        <div class="box-container">
+            <div class="box">
+                <a href="#" class="navbar-logo">
+                    Kita<span>Sehat</span>.
+                </a>
+            </div>
+            <div class="box">
+                <h3>Quick Links</h3>
+                <a href="#" class="link-footer">Beranda</a>
+                <a href="#" class="link-footer">Layanan Kami</a>
+                <a href="#" class="link-footer">Artikel</a>
+                <a href="#" class="link-footer">Kontak</a>
+            </div>
+            <div class="box">
+                <h3>Site Map</h3>
+                <a href="#" class="link-footer">FAQ</a>
+                <a href="#" class="link-footer">Blog</a>
+                <a href="#" class="link-footer">Syarat & Ketentuan</a>
+                <a href="#" class="link-footer">Kebijakan Privasi</a>
+                <a href="#" class="link-footer">Karir</a>
+                <a href="#" class="link-footer">Securty</a>
+            </div>
+            <div class="box">
+                <h3>Social Media</h3>
+                <a href="https://www.instagram.com/mmarsanj?igsh=MTN2MTM2YWZ3a3do" class="link-footer">Instagram</a>
+                <a href="https://web.facebook.com/mmarsa.nj" class="link-footer">Facebook</a>                
+                <a href="#" class="link-footer">Twitter</a>
+            </div>
+        </div>
+        <div class="create">
+            <a href="https://www.instagram.com/mmarsanj?igsh=MTN2MTM2YWZ3a3do" class="wm">
+                Copyright@2023 | Created and Development by mmarsanj
+            </a>
+        </div>
+    </section>
+    <!-- Footer Section End -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnSemuaKomentar = document.getElementById('btn-semua-komentar');
+        const daftarKomentar = document.querySelector('.daftar-komentar');
+        
+        if (btnSemuaKomentar) {
+            btnSemuaKomentar.addEventListener('click', function() {
+                const artikelId = this.getAttribute('data-artikel-id');
+                const loadingText = 'Memuat komentar...';
+                
+                // Disable button and show loading text
+                btnSemuaKomentar.disabled = true;
+                btnSemuaKomentar.textContent = loadingText;
+                
+                fetch(`inc/get_all_comments.php?artikel_id=${artikelId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Gagal memuat komentar');
+                        }
+                        return response.text();
+                    })
+                    .then(html => {
+                        // Hide the "Lihat Semua Komentar" button
+                        btnSemuaKomentar.style.display = 'none';
+                        
+                        // Append comments to the existing list
+                        daftarKomentar.insertAdjacentHTML('beforeend', html);
+                    })
+                    .catch(error => {
+                        console.error('Error loading comments:', error);
+                        btnSemuaKomentar.textContent = 'Gagal memuat komentar';
+                        btnSemuaKomentar.disabled = false;
+                    });
+            });
+        }
+    });
+  </script>
 </body>
 
 </html>

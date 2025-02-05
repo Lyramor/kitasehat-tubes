@@ -2,7 +2,19 @@
     session_start();
     require "inc/koneksi.php";
 
-    $queryArtikel = mysqli_query($conn, "SELECT id, judul, gambar, sinopsis FROM artikel LIMIT 4")
+    $queryArtikel = mysqli_query($conn, "SELECT id, judul, gambar, sinopsis FROM artikel LIMIT 4");
+
+    // Query untuk mengambil testimoni beserta data user
+    $queryTestimoni = mysqli_query($conn, "
+    SELECT t.id, t.isi, t.created_at, 
+        u.username, u.email, u.foto_profil,
+        CONCAT('css/image/', u.foto_profil) as foto_path
+    FROM testimoni t
+    INNER JOIN users u ON t.user_id = u.id
+    ORDER BY t.created_at DESC
+    ");
+
+    $jumlahTestimoni = mysqli_num_rows($queryTestimoni);
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +30,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- css -->
-    <link rel="stylesheet" href="css/style3.css">
+    <link rel="stylesheet" href="css/style2.css">
     <link rel="stylesheet" href="css/artikel.css">
     <title>KitaSehat</title>
 </head>
@@ -38,14 +50,12 @@
             <?php   
                 if (isset($_SESSION['username'])) {
                     // Jika pengguna sudah login, tampilkan tombol Logout
-                    echo '<a href="logout.php" id="login">Logout</a>';
+                    echo '<a href="profile.php" id="login">Profile</a>';
                 } else {
                     // Jika pengguna belum login, tampilkan tombol Masuk
                     echo '<a href="login.php" id="login">Login</a>';
                 }
             ?>
-
-
         </div>
 
 
@@ -171,6 +181,82 @@
     </div>
     <!-- Kontak Section End -->
 
+    <!-- Testimoni Section Start -->
+    <section id="testimoni" class="testimoni">
+        <h2><span>Testimoni</span> Pengguna</h2>
+
+        <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert success" id="alertSuccess">
+            <?php 
+                echo $_SESSION['success']; 
+                unset($_SESSION['success']);
+            ?>
+        </div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert error" id="alertError">
+            <?php 
+                echo $_SESSION['error']; 
+                unset($_SESSION['error']);
+            ?>
+        </div>
+        <?php endif; ?>
+
+        <div class="testimoni-container">
+        <?php if ($jumlahTestimoni > 0): ?>
+            <div class="testimoni-carousel">
+                <?php while ($testimoni = mysqli_fetch_assoc($queryTestimoni)): ?>
+                    <div class="testimoni-slide">
+                        <div class="profile-image">
+                            <?php if (!empty($testimoni['foto_profil'])): ?>
+                                <img src="<?php echo !empty($testimoni['foto_profil']) ? 'css/image/profile/' . htmlspecialchars($testimoni['foto_profil']) : 'https://bootdey.com/img/Content/avatar/avatar1.png'; ?>"" 
+                                    alt="Foto <?php echo htmlspecialchars($testimoni['username']); ?>"
+                                    onerror="this.src='css/image/default-user.png'"/>
+                            <?php else: ?>
+                                <img src="css/image/default-user.png" alt="Default Profile"/>
+                            <?php endif; ?>
+                        </div>
+                        <div class="testimoni-content">
+                            <p class="testimoni-text">"<?php echo htmlspecialchars($testimoni['isi']); ?>"</p>
+                            <div class="user-info">
+                                <p class="username"><?php echo htmlspecialchars($testimoni['username']); ?></p>
+                                <p class="email"><?php echo htmlspecialchars($testimoni['email']); ?></p>
+                                <p class="date"><?php echo date('d F Y', strtotime($testimoni['created_at'])); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            </div>
+            <!-- Navigasi Carousel -->
+            <div class="carousel-nav">
+                <button class="prev-btn">&lt;</button>
+                <button class="next-btn">&gt;</button>
+            </div>
+        <?php else: ?>
+            <div class="no-testimoni">
+                <p>Belum ada testimoni. Jadilah yang pertama memberikan testimoni!</p>
+            </div>
+        <?php endif; ?>
+        </div>
+
+        <!-- Form Testimoni -->
+        <div class="form-testimoni">
+            <h3>Berikan Testimoni Anda</h3>
+            <?php if (isset($_SESSION['username'])): ?>
+                <form action="inc/proses_testimoni.php" method="POST">
+                    <textarea name="testimoni" rows="4" placeholder="Bagikan pengalaman Anda dengan KitaSehat..." required></textarea>
+                    <button type="submit">Kirim Testimoni</button>
+                </form>
+            <?php else: ?>
+                <div class="login-prompt">
+                    <p>Silakan <a href="login.php">login</a> terlebih dahulu untuk memberikan testimoni.</p>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
+    <!-- Testimoni Section End -->
+
     <!-- footer Section start -->
     <section class="footer">
         <div class="box-container">
@@ -211,6 +297,74 @@
     <!-- Footer Section End -->
 
     <script src="js/script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const carousel = document.querySelector('.testimoni-carousel');
+        const slides = document.querySelectorAll('.testimoni-slide');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        let currentSlide = 0;
+
+        // Sembunyikan semua slide kecuali yang pertama
+        slides.forEach((slide, index) => {
+            if (index !== 0) slide.style.display = 'none';
+        });
+
+        // Fungsi untuk menampilkan slide berikutnya
+        function showNextSlide() {
+            slides[currentSlide].style.display = 'none';
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].style.display = 'flex';
+        }
+
+        // Fungsi untuk menampilkan slide sebelumnya
+        function showPrevSlide() {
+            slides[currentSlide].style.display = 'none';
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            slides[currentSlide].style.display = 'flex';
+        }
+
+        // Event listeners untuk tombol navigasi
+        if (prevBtn && nextBtn) {
+            prevBtn.addEventListener('click', showPrevSlide);
+            nextBtn.addEventListener('click', showNextSlide);
+        }
+
+        // Auto-slide setiap 5 detik
+        setInterval(showNextSlide, 5000);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handler untuk loading gambar
+        const profileImages = document.querySelectorAll('.profile-image img');
+        profileImages.forEach(img => {
+            img.addEventListener('load', function() {
+                this.classList.add('loaded');
+            });
+            img.addEventListener('error', function() {
+                this.src = 'css/image/default-user.png';
+            });
+        });
+    });
+
+    // Menghilangkan alert setelah 3 detik
+    setTimeout(function() {
+        let successAlert = document.getElementById("alertSuccess");
+        let errorAlert = document.getElementById("alertError");
+
+        if (successAlert) {
+            successAlert.style.transition = "opacity 0.5s";
+            successAlert.style.opacity = "0";
+            setTimeout(() => successAlert.style.display = "none", 500);
+        }
+
+        if (errorAlert) {
+            errorAlert.style.transition = "opacity 0.5s";
+            errorAlert.style.opacity = "0";
+            setTimeout(() => errorAlert.style.display = "none", 500);
+        }
+    }, 3000); // 3000ms = 3 detik
+</script>
 </body>
 
 </html>

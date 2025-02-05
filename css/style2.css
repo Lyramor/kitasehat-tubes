@@ -382,6 +382,199 @@ body {
     color: var(--bg);
 }
 
+/* Style untuk carousel testimoni */
+/* Testimoni Section */
+.testimoni {
+    padding: 5rem 7% 1.4rem;
+}
+
+.testimoni h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    color: var(--sec);
+}
+
+.testimoni h2 span {
+    color: var(--primary);
+}
+
+/* Container Testimoni */
+.testimoni-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    padding: 2rem;
+}
+
+/* Carousel Styles */
+.testimoni-carousel {
+    overflow: hidden;
+    position: relative;
+}
+
+.testimoni-slide {
+    background: #fff;
+    border-radius: 15px;
+    padding: 2rem;
+    margin: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+/* Profile Image */
+.profile-image {
+    flex-shrink: 0;
+}
+
+.profile-image img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary);
+}
+
+/* Testimoni Content */
+.testimoni-content {
+    flex-grow: 1;
+}
+
+.testimoni-text {
+    color: var(--sec);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.user-info {
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+}
+
+.user-info .username {
+    color: var(--primary);
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+}
+
+.user-info .email {
+    color: var(--sec);
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.user-info .date {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+/* Carousel Navigation */
+.carousel-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.carousel-nav button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.carousel-nav button:hover {
+    background: var(--sec);
+}
+
+/* Form Testimoni */
+.form-testimoni {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-testimoni h3 {
+    color: var(--sec);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.form-testimoni textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    resize: vertical;
+    min-height: 120px;
+    margin-bottom: 1rem;
+}
+
+.form-testimoni button {
+    background: var(--primary);
+    color: white;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.form-testimoni button:hover {
+    background: var(--sec);
+}
+
+.login-prompt {
+    text-align: center;
+    color: var(--sec);
+}
+
+.login-prompt a {
+    color: var(--primary);
+    font-weight: bold;
+}
+
+.no-testimoni {
+    text-align: center;
+    color: var(--sec);
+    padding: 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Alert styles */
+.alert {
+    max-width: 800px;
+    margin: 1rem auto;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.alert.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
 
 
 /* Laptop */
@@ -468,6 +661,21 @@ body {
     .doctor {
         margin-top: 2rem;
     }
+
+    .testimoni-slide {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-image {
+        margin-bottom: 1rem;
+    }
+
+    .profile-image img {
+        width: 80px;
+        height: 80px;
+    }
 }
 
 /* Mobile Phone */
@@ -510,4 +718,15 @@ body {
         margin-top: 16rem;
     }
 
+    .testimoni-container {
+        padding: 1rem;
+    }
+
+    .testimoni-slide {
+        padding: 1rem;
+    }
+
+    .form-testimoni {
+        padding: 1rem;
+    }
 }
