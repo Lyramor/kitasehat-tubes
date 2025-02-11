@@ -1,24 +1,22 @@
-<?php 
-    require 'inc/koneksi.php';
-    require 'inc/functions.php';
+<?php
+session_start();
+require 'inc/koneksi.php';
+require 'inc/functions.php';
 
-    if(isset($_POST["register"])) {
-        if(register($_POST) > 0) {
-            echo "<script>
-                    alert('Registrasi berhasil! Silakan login.');
-                    window.location.href = 'login.php';
-                </script>";
-?>                
-            <meta http-equiv="refresh" content="0.5, url=login.php"/>
-<?php  
-        } else {
-            echo mysqli_error($conn);
-        }
+if (isset($_POST["register"])) {
+    if (register($_POST) > 0) {
+        header("Location: register.php");
+        exit();
+    } else {
+        header("Location: register.php");
+        exit();
     }
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -27,7 +25,9 @@
 
     <!-- css -->
     <link rel="stylesheet" href="css/login4.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
     <div class="main-container">
         <input type="checkbox" id="slide" />
@@ -76,5 +76,37 @@
             </div>
         </div>
     </div>
+
+    <!-- SweetAlert Notifikasi -->
+    <?php
+    if (isset($_SESSION["success"])) {
+        echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Registrasi Berhasil!',
+            text: '" . $_SESSION["success"] . "',
+            confirmButtonText: 'Login Sekarang'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'login.php';
+            }
+        });
+        </script>";
+        unset($_SESSION["success"]);
+    }
+
+    if (isset($_SESSION["error"])) {
+        echo "<script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Registrasi Gagal!',
+            text: '" . $_SESSION["error"] . "'
+        });
+        </script>";
+        unset($_SESSION["error"]);
+    }
+    ?>
+
 </body>
+
 </html>
