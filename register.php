@@ -79,16 +79,52 @@ if (isset($_POST["register"])) {
 
     <!-- SweetAlert Notifikasi -->
     <?php
+    // if (isset($_SESSION["success"])) {
+    //     echo "<script>
+    //     Swal.fire({
+    //         icon: 'success',
+    //         title: 'Registrasi Berhasil!',
+    //         text: '" . $_SESSION["success"] . "',
+    //         confirmButtonText: 'User'
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             window.location.href = 'login.php';
+    //         }
+    //     });
+    //     </script>";
+    //     unset($_SESSION["success"]);
+    // }
+
+    // if (isset($_SESSION["error"])) {
+    //     echo "<script>
+    //     Swal.fire({
+    //         icon: 'error',
+    //         title: 'Registrasi Gagal!',
+    //         text: '" . $_SESSION["error"] . "'
+    //     });
+    //     </script>";
+    //     unset($_SESSION["error"]);
+    // }
+
     if (isset($_SESSION["success"])) {
         echo "<script>
         Swal.fire({
             icon: 'success',
             title: 'Registrasi Berhasil!',
-            text: '" . $_SESSION["success"] . "',
-            confirmButtonText: 'Login Sekarang'
+            text: 'Silakan pilih peran Anda.',
+            showDenyButton: true,
+            confirmButtonText: 'User',
+            denyButtonText: 'Penulis'
         }).then((result) => {
+            let role = '';
             if (result.isConfirmed) {
-                window.location.href = 'login.php';
+                role = 'user';
+            } else if (result.isDenied) {
+                role = 'penulis';
+            }
+    
+            if (role !== '') {
+                window.location.href = 'set_role.php?role=' + role;
             }
         });
         </script>";
