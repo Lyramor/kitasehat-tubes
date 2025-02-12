@@ -45,8 +45,11 @@ if (isset($_POST["login"])) {
             } else if ($row['role'] === 'user') {
                 header("Location: index.php");
                 exit;
+            } else if ($row['role'] === 'penulis') {
+                header("Location: index.php");
+                exit;
             } else {
-                echo "Anda tidak memiliki akses.";
+                echo "<script>alert('Anda tidak memiliki akses.');</script>";
             }
         } else {
             $error = true;

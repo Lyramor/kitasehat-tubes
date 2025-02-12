@@ -5,11 +5,47 @@ require 'inc/functions.php';
 
 if (isset($_POST["register"])) {
     if (register($_POST) > 0) {
-        header("Location: register.php");
-        exit();
+        // Simpan data user sementara sebelum memilih role
+        $_SESSION["temp_user"] = [
+            "username" => $_POST["username"],
+            "nama_lengkap" => $_POST["nama_lengkap"],
+            "email" => $_POST["email"],
+            "password" => password_hash($_POST["password"], PASSWORD_DEFAULT), // Hash password
+            "foto_profil" => "default.png" // Bisa diganti sesuai kebutuhan
+        ];
+        $_SESSION["success"] = "Registrasi berhasil! Silakan pilih peran Anda.";
     } else {
-        header("Location: register.php");
-        exit();
+        $_SESSION["error"] = "Registrasi gagal! Silakan coba lagi.";
+    }
+}
+
+// Jika role dipilih, simpan user ke database
+if (isset($_POST["role"])) {
+    if (!isset($_SESSION['temp_user'])) {
+        $_SESSION["error"] = "Data registrasi tidak ditemukan!";
+    } else {
+        $data = $_SESSION['temp_user'];
+        $role = $_POST["role"];
+
+        // Insert ke database
+        $stmt = mysqli_prepare($conn, "INSERT INTO users (username, nama_lengkap, email, foto_profil, password, role) VALUES (?, ?, ?, ?, ?, ?)");
+        mysqli_stmt_bind_param(
+            $stmt,
+            "ssssss",
+            $data['username'],
+            $data['nama_lengkap'],
+            $data['email'],
+            $data['foto_profil'],
+            $data['password'],
+            $role
+        );
+
+        if (mysqli_stmt_execute($stmt)) {
+            unset($_SESSION['temp_user']); // Hapus data sementara
+            $_SESSION["success_final"] = "Akun berhasil dibuat sebagai $role! Silakan login.";
+        } else {
+            $_SESSION["error"] = "Gagal menyimpan peran!";
+        }
     }
 }
 ?>
@@ -23,7 +59,7 @@ if (isset($_POST["register"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register - KitaSehat</title>
 
-    <!-- css -->
+    <!-- CSS -->
     <link rel="stylesheet" href="css/login4.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -79,39 +115,12 @@ if (isset($_POST["register"])) {
 
     <!-- SweetAlert Notifikasi -->
     <?php
-    // if (isset($_SESSION["success"])) {
-    //     echo "<script>
-    //     Swal.fire({
-    //         icon: 'success',
-    //         title: 'Registrasi Berhasil!',
-    //         text: '" . $_SESSION["success"] . "',
-    //         confirmButtonText: 'User'
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //             window.location.href = 'login.php';
-    //         }
-    //     });
-    //     </script>";
-    //     unset($_SESSION["success"]);
-    // }
-
-    // if (isset($_SESSION["error"])) {
-    //     echo "<script>
-    //     Swal.fire({
-    //         icon: 'error',
-    //         title: 'Registrasi Gagal!',
-    //         text: '" . $_SESSION["error"] . "'
-    //     });
-    //     </script>";
-    //     unset($_SESSION["error"]);
-    // }
-
     if (isset($_SESSION["success"])) {
         echo "<script>
         Swal.fire({
             icon: 'success',
             title: 'Registrasi Berhasil!',
-            text: 'Silakan pilih peran Anda.',
+            text: '" . $_SESSION["success"] . "',
             showDenyButton: true,
             confirmButtonText: 'User',
             denyButtonText: 'Penulis'
@@ -124,11 +133,26 @@ if (isset($_POST["register"])) {
             }
     
             if (role !== '') {
-                window.location.href = 'set_role.php?role=' + role;
+                document.getElementById('roleInput').value = role;
+                document.getElementById('roleForm').submit();
             }
         });
         </script>";
         unset($_SESSION["success"]);
+    }
+
+    if (isset($_SESSION["success_final"])) {
+        echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Registrasi Selesai!',
+            text: '" . $_SESSION["success_final"] . "',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            window.location.href = 'login.php';
+        });
+        </script>";
+        unset($_SESSION["success_final"]);
     }
 
     if (isset($_SESSION["error"])) {
@@ -142,6 +166,11 @@ if (isset($_POST["register"])) {
         unset($_SESSION["error"]);
     }
     ?>
+
+    <!-- Form hidden untuk mengirim role -->
+    <form id="roleForm" method="post" action="" style="display: none;">
+        <input type="hidden" name="role" id="roleInput">
+    </form>
 
 </body>
 
