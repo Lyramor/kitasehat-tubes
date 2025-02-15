@@ -4,24 +4,18 @@ require 'inc/koneksi.php';
 require 'inc/functions.php';
 
 if (isset($_POST["register"])) {
-    // Validate phone number (you can add more complex validation)
-    if (!preg_match('/^[0-9]{10,12}$/', $_POST["no_hp"])) {
-        $_SESSION["error"] = "Nomor HP tidak valid.  Harus terdiri dari 10-12 digit angka.";
+    if (register($_POST) > 0) {
+        $_SESSION["temp_user"] = [
+            "username" => $_POST["username"],
+            "nama_lengkap" => $_POST["nama_lengkap"],
+            "email" => $_POST["email"],
+            "phone" => $_POST["phone"], 
+            "password" => password_hash($_POST["password"], PASSWORD_DEFAULT),
+            "foto_profil" => "default.png"
+        ];
+        $_SESSION["success"] = "Registrasi berhasil! Silakan pilih peran Anda.";
     } else {
-        if (register($_POST) > 0) {
-            // Simpan data user sementara sebelum memilih role
-            $_SESSION["temp_user"] = [
-                "username" => $_POST["username"],
-                "nama_lengkap" => $_POST["nama_lengkap"],
-                "email" => $_POST["email"],
-                "no_hp" => $_POST["no_hp"], 
-                "password" => password_hash($_POST["password"], PASSWORD_DEFAULT), // Hash password
-                "foto_profil" => "default.png" // Bisa diganti sesuai kebutuhan
-            ];
-            $_SESSION["success"] = "Registrasi berhasil! Silakan pilih peran Anda.";
-        } else {
-            $_SESSION["error"] = "Registrasi gagal! Silakan coba lagi.";
-        }
+        $_SESSION["error"] = "Registrasi gagal! Silakan coba lagi.";
     }
 }
 
@@ -33,25 +27,35 @@ if (isset($_POST["role"])) {
         $data = $_SESSION['temp_user'];
         $role = $_POST["role"];
 
-        // Insert ke database
-        $stmt = mysqli_prepare($conn, "INSERT INTO users (username, nama_lengkap, email, no_hp, foto_profil, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        mysqli_stmt_bind_param(
-            $stmt,
-            "sssssss",
-            $data['username'],
-            $data['nama_lengkap'],
-            $data['email'],
-            $data['no_hp'], // Include phone number
-            $data['foto_profil'],
-            $data['password'],
-            $role
-        );
+        // Insert ke database dengan nilai AUTO_INCREMENT untuk id
+        $query = "INSERT INTO users (username, nama_lengkap, email, foto_profil, password, role, phone) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        if (mysqli_stmt_execute($stmt)) {
-            unset($_SESSION['temp_user']); // Hapus data sementara
-            $_SESSION["success_final"] = "Akun berhasil dibuat sebagai $role! Silakan login.";
+        if($stmt = mysqli_prepare($conn, $query)) {
+            mysqli_stmt_bind_param(
+                $stmt,
+                "sssssss",
+                $data['username'],
+                $data['nama_lengkap'],
+                $data['email'],
+                $data['foto_profil'],
+                $data['password'],
+                $role,
+                $data['phone']
+            );
+
+            if (mysqli_stmt_execute($stmt)) {
+                unset($_SESSION['temp_user']); 
+                $_SESSION["success_final"] = "Akun berhasil dibuat sebagai $role! Silakan login.";
+                header("Location: login.php");
+                exit;
+            } else {
+                $_SESSION["error"] = "Gagal menyimpan data: " . mysqli_error($conn);
+            }
+            
+            mysqli_stmt_close($stmt);
         } else {
-            $_SESSION["error"] = "Gagal menyimpan peran!";
+            $_SESSION["error"] = "Gagal mempersiapkan query: " . mysqli_error($conn);
         }
     }
 }
@@ -95,10 +99,9 @@ if (isset($_POST["role"])) {
                     </div>
 
                     <div class="data">
-                        <label for="no_hp">Nomor HP</label>
-                        <input type="text" name="no_hp" id="no_hp" autocomplete="off" required />
+                        <label for="phone">Nomor HP</label>
+                        <input type="tel" name="phone" id="phone" autocomplete="off" required pattern="[0-9]{10,15}" />
                     </div>
-
 
                     <div class="data">
                         <label for="password">Password</label>

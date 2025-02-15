@@ -46,7 +46,7 @@ $countData = mysqli_num_rows($queryArtikel);
 
 <body>
   <!-- Navbar start -->
-  <div class="navbar">
+  <div class="navbar" style="background-color: rgba(241, 241, 241);">
     <a href="index.php" class="navbar-logo">
       Kita<span>Sehat</span>.
     </a>
@@ -72,8 +72,8 @@ $countData = mysqli_num_rows($queryArtikel);
           if (isset($_SESSION['role']) && $_SESSION['role'] === 'penulis') {
               echo '<a href="postingan.php">Postingan</a>';
           }
-          // Tampilkan tombol Logout jika sudah login
-          echo '<a href="logout.php" id="login">Logout</a>';
+          
+          echo '<a href="profile.php" id="login">Profile</a>';
       } else {
           // Jika belum login, tampilkan tombol Login
           echo '<a href="login.php" id="login">Login</a>';
@@ -81,6 +81,7 @@ $countData = mysqli_num_rows($queryArtikel);
     }
       ?>
     </div>
+
 
     <div class="hamburger">
       <a href="#" id="hamburger" class="fa-solid fa-bars fa-xl"></a>

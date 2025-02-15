@@ -1,22 +1,18 @@
 <?php  
 session_start();
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 require "inc/koneksi.php";
-
-// Check if user is logged in
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
+// Authentication check
+if(!isset($_SESSION['login']) || !isset($_SESSION['id'])){
+    header("location: ../login.php");
     exit();
 }
 
+$user_id = $_SESSION['id'];
 // Create upload directory if it doesn't exist
 $uploadDir = 'css/image/profile';
 if (!file_exists($uploadDir)) {
     mkdir($uploadDir, 0777, true);
 }
-
 // Get user data
 $username = $_SESSION['username'];
 try {
@@ -31,7 +27,6 @@ try {
 } catch (Exception $e) {
     die("Error: " . $e->getMessage());
 }
-
 // Function to handle image upload
 function upload_image($conn, $username) {
     $targetDir = "css/image/profile/";
@@ -73,7 +68,6 @@ function upload_image($conn, $username) {
         throw new Exception("Gagal mengupload file.");
     }
 }
-
 // Handle form submission
 if (isset($_POST['update_profile'])) {
     $nama_lengkap = mysqli_real_escape_string($conn, $_POST['nama_lengkap']);
@@ -113,61 +107,58 @@ if (isset($_POST['update_profile'])) {
         exit();
     }
 }
-
 // Handle password change
 if (isset($_POST['change_password'])) {
-  $old_password = $_POST['old_password'];
-  $new_password = $_POST['new_password'];
-  $confirm_password = $_POST['confirm_password'];
-  
-  try {
-      // Verify old password
-      $stmt = $conn->prepare("SELECT password FROM users WHERE username = ?");
-      $stmt->bind_param("s", $username);
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $user_data = $result->fetch_assoc();
-      
-      if (!password_verify($old_password, $user_data['password'])) {
-          throw new Exception("Kata sandi lama tidak sesuai");
-      }
-      
-      // Validate new password
-      if (strlen($new_password) < 8) {
-          throw new Exception("Kata sandi baru minimal 8 karakter");
-      }
-      
-      // Check if new passwords match
-      if ($new_password !== $confirm_password) {
-          throw new Exception("Konfirmasi kata sandi baru tidak sesuai");
-      }
-      
-      // Hash new password
-      $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-      
-      // Update password in database
-      $stmt = $conn->prepare("UPDATE users SET password = ? WHERE username = ?");
-      $stmt->bind_param("ss", $hashed_password, $username);
-      
-      if (!$stmt->execute()) {
-          throw new Exception("Gagal mengupdate kata sandi");
-      }
-      
-      $_SESSION['success'] = "Kata sandi berhasil diubah!";
-      header("Location: profile.php");
-      exit();
-      
-  } catch (Exception $e) {
-      $_SESSION['error'] = $e->getMessage();
-      header("Location: profile.php#change-password");
-      exit();
-  }
+$old_password = $_POST['old_password'];
+$new_password = $_POST['new_password'];
+$confirm_password = $_POST['confirm_password'];
+
+try {
+    // Verify old password
+    $stmt = $conn->prepare("SELECT password FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user_data = $result->fetch_assoc();
+    
+    if (!password_verify($old_password, $user_data['password'])) {
+        throw new Exception("Kata sandi lama tidak sesuai");
+    }
+    
+    // Validate new password
+    if (strlen($new_password) < 8) {
+        throw new Exception("Kata sandi baru minimal 8 karakter");
+    }
+    
+    // Check if new passwords match
+    if ($new_password !== $confirm_password) {
+        throw new Exception("Konfirmasi kata sandi baru tidak sesuai");
+    }
+    
+    // Hash new password
+    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+    
+    // Update password in database
+    $stmt = $conn->prepare("UPDATE users SET password = ? WHERE username = ?");
+    $stmt->bind_param("ss", $hashed_password, $username);
+    
+    if (!$stmt->execute()) {
+        throw new Exception("Gagal mengupdate kata sandi");
+    }
+    
+    $_SESSION['success'] = "Kata sandi berhasil diubah!";
+    header("Location: profile.php");
+    exit();
+    
+} catch (Exception $e) {
+    $_SESSION['error'] = $e->getMessage();
+    header("Location: profile.php#change-password");
+    exit();
+}
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -176,53 +167,46 @@ if (isset($_POST['change_password'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
         integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
     <!-- css -->
     <link rel="stylesheet" href="css/style3.css">
     <link rel="stylesheet" href="css/profile.css">
     
     <title>KitaSehat</title>
 </head>
-
 <body>
     <!-- Navbar start -->
-    <div class="navbar">
+    <div class="navbar" style="background-color: rgba(241, 241, 241);">
         <a href="#" class="navbar-logo">
             Kita<span>Sehat</span>.
         </a>
-
         <div class="navbar-nav">
-      <a href="index.php#beranda">Beranda</a>
-      <a href="index.php#layanan">About</a>
-      <a href="index.php#artikel">Artikel</a>
-      <a href="index.php#kontak">Kontak</a>
-      <?php
-      if (session_status() == PHP_SESSION_NONE) {
-        session_start();    
-      // Cek apakah sudah login berdasarkan session
-      if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
-          // Periksa apakah ada role yang diset dalam session
-          if (isset($_SESSION['role']) && $_SESSION['role'] === 'penulis') {
-              echo '<a href="postingan.php">Postingan</a>';
-          }
-          // Tampilkan tombol Logout jika sudah login
-          echo '<a href="logout.php" id="login">Logout</a>';
-      } else {
-          // Jika belum login, tampilkan tombol Login
-          echo '<a href="login.php" id="login">Login</a>';
-      }
-    }
-      ?>
-
-
+        <a href="index.php#beranda">Beranda</a>
+        <a href="index.php#layanan">About Us</a>
+        <a href="index.php#artikel">Artikel</a>
+        <a href="index.php#kontak">Kontak</a>
+        <?php
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();    
+            // Cek apakah sudah login berdasarkan session
+            if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
+                // Periksa apakah ada role yang diset dalam session
+                if (isset($_SESSION['role']) && $_SESSION['role'] === 'penulis') {
+                    echo '<a href="postingan.php">Postingan</a>';
+                }
+                
+                echo '<a href="profile.php" id="login">Profile</a>';
+            } else {
+                // Jika belum login, tampilkan tombol Login
+                echo '<a href="login.php" id="login">Login</a>';
+            }
+        }
+        ?>
+        </div>
         <div class="hamburger">
             <a href="#" id="hamburger" style="margin-left: 1rem;" class="fa-solid fa-bars fa-xl"></a>
         </div>
-
-
     </div>
     <!-- Navbar end -->
-
     <!-- Profile start -->
     <section class="profile-section">
         <div class="profile-header">
@@ -237,7 +221,6 @@ if (isset($_POST['change_password'])) {
                     <li><a href="logout.php">Logout</a></li>
                 </ul>
             </div>
-
             <div class="profile-content">
                 <!-- Single form for all profile updates -->
                 <form action="" method="POST" enctype="multipart/form-data">
@@ -253,7 +236,6 @@ if (isset($_POST['change_password'])) {
                             <small>Format: JPG, GIF atau PNG. Ukuran maks. 800KB</small>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label>Nama Pengguna</label>
                         <input type="text" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" readonly>
@@ -270,12 +252,10 @@ if (isset($_POST['change_password'])) {
                         <label>Nomor Telepon</label>
                         <input type="tel" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" required>
                     </div>
-
                     <div class="form-actions">
                         <button type="submit" name="update_profile" class="btn-save">Simpan Perubahan</button>
                         <button type="button" class="btn-cancel">Batal</button>
                     </div>
-
                     <?php if(isset($_SESSION['error'])): ?>
                         <div class="error-message" style="color: red; margin-top: 10px;">
                             <?php 
@@ -287,7 +267,6 @@ if (isset($_POST['change_password'])) {
                 </form>
             </div>
         </div>
-
         <!-- Konten Ubah Kata Sandi -->
         <div id="change-password" class="content-section" style="display: none;">
     <div class="profile-content">
@@ -305,7 +284,6 @@ if (isset($_POST['change_password'])) {
                 <label>Konfirmasi Kata Sandi Baru</label>
                 <input type="password" name="confirm_password" required>
             </div>
-
             <?php if(isset($_SESSION['error']) && strpos($_SERVER['REQUEST_URI'], '#change-password') !== false): ?>
                 <div class="error-message" style="color: red; margin-bottom: 10px;">
                     <?php 
@@ -314,7 +292,6 @@ if (isset($_POST['change_password'])) {
                     ?>
                 </div>
             <?php endif; ?>
-
             <div class="form-actions">
                 <button type="submit" name="change_password" class="btn-save">Simpan Perubahan</button>
                 <button type="button" class="btn-cancel" onclick="cancelPasswordChange()">Batal</button>
@@ -324,8 +301,6 @@ if (isset($_POST['change_password'])) {
 </div>
     </section>
     <!-- Profile end -->
-
-
     <!-- footer Section start -->
         <section class="footer">
         <div class="box-container">
@@ -364,7 +339,6 @@ if (isset($_POST['change_password'])) {
         </div>
     </section>
     <!-- Footer Section End -->
-
     <script>
     // Profile links handling
     const profileLinks = document.querySelectorAll('.profile-links a');
@@ -386,7 +360,6 @@ if (isset($_POST['change_password'])) {
             }
         });
     });
-
     // Image preview and validation
     document.getElementById('foto_profil').onchange = function(e) {
         const file = e.target.files[0];
@@ -416,20 +389,17 @@ if (isset($_POST['change_password'])) {
             reader.readAsDataURL(file);
         }
     }
-
     // Reset image function
     function resetImage() {
         document.getElementById('profile-preview').src = 'https://bootdey.com/img/Content/avatar/avatar1.png';
         document.getElementById('foto_profil').value = '';
         document.querySelector('input[name="old_image"]').value = '';
     }
-
     // Display messages
     <?php if(isset($_SESSION['success'])): ?>
         alert('<?php echo addslashes($_SESSION['success']); ?>');
         <?php unset($_SESSION['success']); ?>
     <?php endif; ?>
-
     // Add to your existing JavaScript
     function cancelPasswordChange() {
     // Reset form fields
@@ -448,7 +418,6 @@ if (isset($_POST['change_password'])) {
     document.getElementById('change-password').style.display = 'none';
     document.querySelector('.profile-content').style.display = 'block';
 }
-
     // Add password confirmation validation
     document.querySelector('input[name="confirm_password"]').addEventListener('input', function() {
         const newPassword = document.querySelector('input[name="new_password"]').value;
@@ -458,7 +427,6 @@ if (isset($_POST['change_password'])) {
             this.setCustomValidity('');
         }
     });
-
     document.querySelector('input[name="new_password"]').addEventListener('input', function() {
         const confirmPassword = document.querySelector('input[name="confirm_password"]');
         if (confirmPassword.value !== this.value) {
@@ -469,5 +437,4 @@ if (isset($_POST['change_password'])) {
     });
     </script>
 </body>
-
 </html>

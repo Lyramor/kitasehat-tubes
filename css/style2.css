@@ -29,7 +29,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 1.4rem 7%;
-    background-color: rgba(241, 241, 241, 0.9);
+    background-color: rgba(241, 241, 241);
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
     position: fixed;
     top: 0;
