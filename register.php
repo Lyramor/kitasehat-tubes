@@ -14,7 +14,7 @@ if (isset($_POST["register"])) {
                 "username" => $_POST["username"],
                 "nama_lengkap" => $_POST["nama_lengkap"],
                 "email" => $_POST["email"],
-                "no_hp" => $_POST["no_hp"], // Store phone number in session
+                "no_hp" => $_POST["no_hp"], 
                 "password" => password_hash($_POST["password"], PASSWORD_DEFAULT), // Hash password
                 "foto_profil" => "default.png" // Bisa diganti sesuai kebutuhan
             ];
