@@ -58,7 +58,7 @@
 
 <body>
   <!-- Navbar start -->
-  <div class="navbar">
+  <div class="navbar" style="background-color: rgba(241, 241, 241);">
     <a href="index.php" class="navbar-logo">
       Kita<span>Sehat</span>.
     </a>
@@ -71,27 +71,27 @@
     </div>
 
     <div class="navbar-nav">
-      <a href="index.php#beranda">Beranda</a>
-      <a href="index.php#layanan">About</a>
-      <a href="index.php#artikel">Artikel</a>
-      <a href="index.php#kontak">Kontak</a>
-      <?php
-      if (session_status() == PHP_SESSION_NONE) {
-        session_start();    
-      // Cek apakah sudah login berdasarkan session
-      if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
-          // Periksa apakah ada role yang diset dalam session
-          if (isset($_SESSION['role']) && $_SESSION['role'] === 'penulis') {
-              echo '<a href="postingan.php">Postingan</a>';
-          }
-          // Tampilkan tombol Logout jika sudah login
-          echo '<a href="logout.php" id="login">Logout</a>';
-      } else {
-          // Jika belum login, tampilkan tombol Login
-          echo '<a href="login.php" id="login">Login</a>';
-      }
-    }
-      ?>
+        <a href="index.php#beranda">Beranda</a>
+        <a href="index.php#layanan">About</a>
+        <a href="index.php#artikel">Artikel</a>
+        <a href="index.php#kontak">Kontak</a>
+        <?php
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();    
+            // Cek apakah sudah login berdasarkan session
+            if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
+                // Periksa apakah ada role yang diset dalam session
+                if (isset($_SESSION['role']) && $_SESSION['role'] === 'penulis') {
+                    echo '<a href="postingan.php">Postingan</a>';
+                }
+                
+                echo '<a href="profile.php" id="login">Profile</a>';
+            } else {
+                // Jika belum login, tampilkan tombol Login
+                echo '<a href="login.php" id="login">Login</a>';
+            }
+        }
+        ?>
     </div>
 
     <div class="hamburger">
@@ -117,14 +117,13 @@
     </div>
   <!-- artikel section end-->
 
-  <!-- Komentar Section Start -->
-  <section id="komentar" class="komentar-section">
-      <div class="komentar-container">
-          <h3>Komentar</h3>
+    <!-- Komentar Section Start -->
+    <section id="komentar" class="komentar-section">
+        <div class="komentar-container">
+            <h3 style="color: black; margin-bottom:1rem;">Komentar</h3>
 
-          <?php
-
-  function get_profile_image_path($foto_profil) {
+<?php
+function get_profile_image_path($foto_profil) {
     $possible_paths = [
         'upload/profile/' . $foto_profil,
         'assets/default-profile.png'
@@ -168,11 +167,11 @@
 
             // Ambil 5 komentar terbaru
             $query_komentar = "SELECT k.*, u.username, u.foto_profil 
-                              FROM komentar k 
-                              JOIN users u ON k.user_id = u.id 
-                              WHERE k.artikel_id = ? 
-                              ORDER BY k.created_at DESC 
-                              LIMIT 5";
+                                FROM komentar k 
+                                JOIN users u ON k.user_id = u.id 
+                                WHERE k.artikel_id = ? 
+                                ORDER BY k.created_at DESC 
+                                LIMIT 5";
             
             $stmt = $conn->prepare($query_komentar);
             $stmt->bind_param("i", $artikel['id']);
@@ -205,15 +204,15 @@
 
         <!-- Tombol Lihat Semua Komentar -->
         <?php if ($total_comments > 5): ?>
-          <div class="lihat-semua-komentar">
-            <button id="btn-semua-komentar" data-artikel-id="<?php echo $artikel['id']; ?>">
-                Lihat Semua Komentar (<?php echo $total_comments; ?>)
-            </button>
-          </div>
+            <div class="lihat-semua-komentar">
+                <button id="btn-semua-komentar" data-artikel-id="<?php echo $artikel['id']; ?>">
+                    Lihat Semua Komentar (<?php echo $total_comments; ?>)
+                </button>
+            </div>
         <?php endif; ?>
-      </div>
-  </section>
-  <!-- Komentar Section End -->
+    </div>
+</section>
+<!-- Komentar Section End -->
 
 
     <!-- footer Section start -->
@@ -254,7 +253,7 @@
         </div>
     </section>
     <!-- Footer Section End -->
-  <script>
+    <script>
     document.addEventListener('DOMContentLoaded', function() {
         const btnSemuaKomentar = document.getElementById('btn-semua-komentar');
         const daftarKomentar = document.querySelector('.daftar-komentar');

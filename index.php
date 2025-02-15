@@ -37,44 +37,34 @@
 
 <body>
     <!-- Navbar start -->
-    <div class="navbar">
+    <div class="navbar" style="background-color: rgba(241, 241, 241);">
         <a href="#" class="navbar-logo">
             Kita<span>Sehat</span>.
         </a>
 
-    <div class="navbar-nav">
-    <a href="#beranda">Beranda</a>
-    <a href="#layanan">About</a>
-    <a href="#artikel">Artikel</a>
-    <a href="#kontak">Kontak</a>
-    <?php
-    // Cek apakah session sudah dimulai
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-
-    // Cek apakah sudah login berdasarkan session
-    if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
-        // Periksa apakah ada role yang diset dalam session
-        if (isset($_SESSION['role']) && $_SESSION['role'] === 'penulis') {
-            echo '<a href="postingan.php">Postingan</a>';
-        }
-        // Tampilkan tombol Logout jika sudah login
-        echo '<a href="logout.php" id="login">Logout</a>';
-    } else {
-        // Jika belum login, tampilkan tombol Login
-        echo '<a href="login.php" id="login">Login</a>';
-    }
-    ?>
-</div>
-
-
-
+        <div class="navbar-nav">
+            <a href="#beranda">Beranda</a>
+            <a href="#layanan">About Us</a>
+            <a href="#artikel">Artikel</a>
+            <a href="#kontak">Kontak</a>
+            <?php
+                // Cek apakah sudah login berdasarkan session
+                if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
+                    // Periksa apakah ada role yang diset dalam session
+                    if (isset($_SESSION['role']) && $_SESSION['role'] === 'penulis') {
+                        echo '<a href="postingan/">Postingan</a>';
+                    }
+                    
+                    echo '<a href="profile.php" id="login">Profile</a>';
+                } else {
+                    // Jika belum login, tampilkan tombol Login
+                    echo '<a href="login.php" id="login">Login</a>';
+                }
+            ?>
+        </div>
         <div class="hamburger">
             <a href="#" id="hamburger" style="margin-left: 1rem;" class="fa-solid fa-bars fa-xl"></a>
         </div>
-
-
     </div>
     <!-- Navbar end -->
 
@@ -87,7 +77,13 @@
             <?php } else { ?>
             <p>Chat dokter dan update informasi seputar kesehatan.</p>
             <?php } ?>
-            <a href="register.php" class="cta">Registrasi</a>
+            <?php 
+                if (isset($_SESSION['login']) && $_SESSION['login'] === true){
+                    echo '<a href="logout.php" class="cta">Logout</a>';
+                } else {
+                    echo '<a href="register.php" class="cta">Registrasi</a>';
+                }
+            ?>
         </main>
     </section>
     <!-- Hero Section End -->
