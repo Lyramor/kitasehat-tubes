@@ -4,18 +4,24 @@ require 'inc/koneksi.php';
 require 'inc/functions.php';
 
 if (isset($_POST["register"])) {
-    if (register($_POST) > 0) {
-        // Simpan data user sementara sebelum memilih role
-        $_SESSION["temp_user"] = [
-            "username" => $_POST["username"],
-            "nama_lengkap" => $_POST["nama_lengkap"],
-            "email" => $_POST["email"],
-            "password" => password_hash($_POST["password"], PASSWORD_DEFAULT), // Hash password
-            "foto_profil" => "default.png" // Bisa diganti sesuai kebutuhan
-        ];
-        $_SESSION["success"] = "Registrasi berhasil! Silakan pilih peran Anda.";
+    // Validate phone number (you can add more complex validation)
+    if (!preg_match('/^[0-9]{10,12}$/', $_POST["no_hp"])) {
+        $_SESSION["error"] = "Nomor HP tidak valid.  Harus terdiri dari 10-12 digit angka.";
     } else {
-        $_SESSION["error"] = "Registrasi gagal! Silakan coba lagi.";
+        if (register($_POST) > 0) {
+            // Simpan data user sementara sebelum memilih role
+            $_SESSION["temp_user"] = [
+                "username" => $_POST["username"],
+                "nama_lengkap" => $_POST["nama_lengkap"],
+                "email" => $_POST["email"],
+                "no_hp" => $_POST["no_hp"], 
+                "password" => password_hash($_POST["password"], PASSWORD_DEFAULT), // Hash password
+                "foto_profil" => "default.png" // Bisa diganti sesuai kebutuhan
+            ];
+            $_SESSION["success"] = "Registrasi berhasil! Silakan pilih peran Anda.";
+        } else {
+            $_SESSION["error"] = "Registrasi gagal! Silakan coba lagi.";
+        }
     }
 }
 
@@ -28,13 +34,14 @@ if (isset($_POST["role"])) {
         $role = $_POST["role"];
 
         // Insert ke database
-        $stmt = mysqli_prepare($conn, "INSERT INTO users (username, nama_lengkap, email, foto_profil, password, role) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt = mysqli_prepare($conn, "INSERT INTO users (username, nama_lengkap, email, no_hp, foto_profil, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)");
         mysqli_stmt_bind_param(
             $stmt,
-            "ssssss",
+            "sssssss",
             $data['username'],
             $data['nama_lengkap'],
             $data['email'],
+            $data['no_hp'], // Include phone number
             $data['foto_profil'],
             $data['password'],
             $role
@@ -86,6 +93,12 @@ if (isset($_POST["role"])) {
                         <label for="email">Email</label>
                         <input type="email" name="email" id="email" autocomplete="off" required />
                     </div>
+
+                    <div class="data">
+                        <label for="no_hp">Nomor HP</label>
+                        <input type="text" name="no_hp" id="no_hp" autocomplete="off" required />
+                    </div>
+
 
                     <div class="data">
                         <label for="password">Password</label>
