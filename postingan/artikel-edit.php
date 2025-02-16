@@ -172,7 +172,7 @@ if (isset($_POST['update'])) {
     <title>Ubah Artikel - KitaSehat</title>
 
     <style>
-        .btn-primary, .btn-warning, .btn-info, .btn-danger {
+        .btn-primary, .btn-warning, .btn-info, .btn-danger, .btn-secondary {
             padding: 8px 16px;
             margin: 5px;
             border: none;
@@ -255,7 +255,7 @@ if (isset($_POST['update'])) {
     <div class="container">
         <form id="form-edit-artikel" action="" method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="judul">Title <span class="text-danger">*</span></label>
+                <label for="judul">Judul <span class="text-danger">*</span></label>
                 <input type="text" id="judul" name="judul" required 
                        value="<?php echo htmlspecialchars($artikel['judul']); ?>"
                        placeholder="Masukkan judul artikel">
@@ -303,6 +303,11 @@ if (isset($_POST['update'])) {
                 <small class="text-muted">Accepted formats: JPG, PNG, GIF (max 4MB)</small>
             </div>
 
+            <button class="btn-primary" type="submit" name="update">
+                <i class="fas fa-save"></i> Simpan Perubahan
+            </button>
+
+
             <?php if ($artikel['status'] == 'aktif'): ?>
             <button class="btn-warning" type="submit" name="archive" 
                     onclick="return confirm('Apakah Anda yakin ingin mengarsipkan artikel ini?')">
@@ -322,7 +327,7 @@ if (isset($_POST['update'])) {
             </button>
             
             <!-- Cancel Button -->
-            <a href="artikel.php" class="btn-danger">
+            <a href="artikel.php" class="btn-secondary">
                 <i class="fas fa-times"></i> Batal
             </a>
         </form>

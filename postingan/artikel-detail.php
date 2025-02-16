@@ -14,10 +14,10 @@ $article_id = $_GET['p'] ?? 0;
 
 // Fetch article details with user and category information
 $query = mysqli_query($conn, "SELECT artikel.*, kategori.nama AS nama_kategori, users.nama_lengkap 
-                             FROM artikel 
-                             JOIN kategori ON artikel.kategori_id = kategori.id 
-                             JOIN users ON artikel.user_id = users.id
-                             WHERE artikel.id = '$article_id'");
+                              FROM artikel 
+                              JOIN kategori ON artikel.kategori_id = kategori.id 
+                              JOIN users ON artikel.user_id = users.id
+                              WHERE artikel.id = '$article_id'");
 $article = mysqli_fetch_assoc($query);
 
 // Handle archive action
