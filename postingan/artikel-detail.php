@@ -72,7 +72,7 @@ if(isset($_POST['archive'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Article Detail - <?php echo htmlspecialchars($article['judul']); ?></title>
+    <title>Detail Artikel - <?php echo htmlspecialchars($article['judul']); ?></title>
     <link rel="stylesheet" href="../css/style2.css">
     <link rel="stylesheet" href="../css/postingan.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
@@ -172,14 +172,14 @@ if(isset($_POST['archive'])) {
             <?php endif; ?>
 
             <div class="article-synopsis">
-                <h3>Synopsis</h3>
+                <h3>Sinopsis</h3>
                 <div class="synopsis-content">
                     <?php echo $article['sinopsis']; ?>
                 </div>
             </div>
 
             <div class="article-content">
-                <h3>Content</h3>
+                <h3>Konten</h3>
                 <div class="content-body">
                     <?php echo $article['isi']; ?>
                 </div>
@@ -188,27 +188,27 @@ if(isset($_POST['archive'])) {
             <div class="article-actions">
               <form action="" style="display: inline;">
                 <a href="./artikel.php" class="btn btn-secondary">
-                  <i class="fas fa-arrow-left"></i> Back
+                  <i class="fas fa-arrow-left"></i> Kembali
                 </a>
               </form>
                 
                 <form method="POST" style="display: inline;">
                   <button type="submit" name="archive" class="btn btn-warning">
                     <i class="fas <?php echo $article['status'] === 'arsip' ? 'fa-box-open' : 'fa-archive'; ?>"></i>
-                    <?php echo $article['status'] === 'arsip' ? 'Unarchive' : 'Archive'; ?>
+                    <?php echo $article['status'] === 'arsip' ? 'Batalkan Arsip' : 'Arsip'; ?>
                   </button>
                 </form>
 
                 <form action="" style="display: inline;">
                   <button onclick="window.print()" class="btn btn-info">
-                    <i class="fas fa-print"></i> Print
+                    <i class="fas fa-print"></i> Cetak
                   </button>
                 </form>
 
                 <form method="POST" style="display: inline;" 
                       onsubmit="return confirm('Are you sure you want to delete this article?')">
                     <button type="submit" name="delete" class="btn btn-danger">
-                        <i class="fas fa-trash"></i> Delete
+                        <i class="fas fa-trash"></i> Hapus
                     </button>
                 </form>
             </div>
