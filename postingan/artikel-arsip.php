@@ -117,19 +117,19 @@ $jumlahArtikel = mysqli_num_rows($query);
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Synopsis</th>
-                        <th>Image</th>
-                        <th>Created At</th>
-                        <th>Archived At</th>
-                        <th>Actions</th>
+                        <th>Judul</th>
+                        <th>Kategori</th>
+                        <th>Sinopsis</th>
+                        <th>Gambar</th>
+                        <th>Dibuat pada</th>
+                        <th>Arsip pada</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if ($jumlahArtikel == 0): ?>
                         <tr>
-                            <td colspan="8" class="text-center">No archived articles available</td>
+                            <td colspan="8" class="text-center">Tidak ada arsip artikel ditemukan.</td>
                         </tr>
                     <?php else: 
                         $nomor = 1;
@@ -143,7 +143,7 @@ $jumlahArtikel = mysqli_num_rows($query);
                                     <?php if ($data['gambar']): ?>
                                         <img src="../css/image/<?php echo $data['gambar']; ?>" class="article-image">
                                     <?php else: ?>
-                                        <span class="text-muted">No image</span>
+                                        <span class="text-muted">Tidak ada gambar</span>
                                     <?php endif; ?>
                                 </td>
                                 <td><?php echo date('d M Y H:i', strtotime($data['created_at'])); ?></td>
@@ -152,13 +152,13 @@ $jumlahArtikel = mysqli_num_rows($query);
                                     <form method="post" style="display:inline;">
                                         <input type="hidden" name="artikel_id" value="<?php echo $data['id']; ?>">
                                         <button type="submit" name="unarchive" class="btn-warning btn-sm" onclick="return confirm('Are you sure you want to unarchive this article?')">
-                                            Unarchive
+                                            Batal Arsip
                                         </button>
                                     </form>
                                     <form method="post" style="display:inline;">
                                         <input type="hidden" name="artikel_id" value="<?php echo $data['id']; ?>">
                                         <button type="submit" name="delete" class="btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this article?')">
-                                            Delete
+                                            Hapus
                                         </button>
                                     </form>
                                 </td>

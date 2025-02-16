@@ -169,7 +169,7 @@ if (isset($_POST['update'])) {
     <link rel="stylesheet" href="../css/style2.css">
     <link rel="stylesheet" href="../css/artikel1.css">
     <link rel="stylesheet" href="../css/postingan.css">
-    <title>Edit Article - KitaSehat</title>
+    <title>Ubah Artikel - KitaSehat</title>
 
     <style>
         .btn-primary, .btn-warning, .btn-info, .btn-danger {
@@ -249,7 +249,7 @@ if (isset($_POST['update'])) {
 
     <!-- Form Section start -->
     <section id="#" class="postingan">
-        <h2>Edit Article</h2>
+        <h2>Ubah Artikel</h2>
     </section>
 
     <div class="container">
@@ -258,13 +258,13 @@ if (isset($_POST['update'])) {
                 <label for="judul">Title <span class="text-danger">*</span></label>
                 <input type="text" id="judul" name="judul" required 
                        value="<?php echo htmlspecialchars($artikel['judul']); ?>"
-                       placeholder="Enter article title">
+                       placeholder="Masukkan judul artikel">
             </div>
 
             <div class="form-group">
-                <label for="kategori">Category <span class="text-danger">*</span></label>
+                <label for="kategori">Kategori <span class="text-danger">*</span></label>
                 <select name="kategori" id="kategori" required>
-                    <option value="">Select One</option>
+                    <option value="">Pilih kategori</option>
                     <?php while ($data = mysqli_fetch_array($queryKategori)) { ?>
                         <option value="<?php echo $data['id']; ?>" 
                                 <?php echo ($data['id'] == $artikel['kategori_id']) ? 'selected' : ''; ?>>
@@ -275,25 +275,25 @@ if (isset($_POST['update'])) {
             </div>
 
             <div class="form-group">
-                <label for="isi">Content <span class="text-danger">*</span></label>
+                <label for="isi">Konten <span class="text-danger">*</span></label>
                 <input id="article-content" type="hidden" name="isi" 
                         value="<?php echo htmlspecialchars($artikel['isi']); ?>">
                 <trix-editor input="article-content"></trix-editor>
             </div>
 
             <div class="form-group">
-                <label for="sinopsis">Synopsis <span class="text-danger">*</span></label>
+                <label for="sinopsis">Sinopsis <span class="text-danger">*</span></label>
                 <input id="article-synopsis" type="hidden" name="sinopsis" 
                         value="<?php echo htmlspecialchars($artikel['sinopsis']); ?>">
                 <trix-editor input="article-synopsis"></trix-editor>
             </div>
 
             <div class="form-group">
-                <label for="gambar">Image</label>
+                <label for="gambar">Gambar</label>
                 <?php if (!empty($artikel['gambar'])): ?>
                     <div class="current-image">
-                        <p>Current image:</p>
-                        <img src="../css/image/<?php echo $artikel['gambar']; ?>" alt="Current article image">
+                        <p>Gambar saat ini:</p>
+                        <img src="../css/image/<?php echo $artikel['gambar']; ?>" alt="Gambar artikel saat ini">
                     </div>
                 <?php endif; ?>
                 <input type="file" id="gambar" name="gambar" 
@@ -312,18 +312,18 @@ if (isset($_POST['update'])) {
             
             <!-- Print Button -->
             <button class="btn-info" type="button" onclick="printArtikel()">
-                <i class="fas fa-print"></i> Print
+                <i class="fas fa-print"></i> Cetak
             </button>
 
             <!-- Delete Button -->
             <button class="btn-danger" type="submit" name="delete" 
                 onclick="return confirm('Apakah Anda yakin ingin menghapus artikel ini? Tindakan ini tidak dapat dibatalkan.')">
-                <i class="fas fa-trash"></i> Delete
+                <i class="fas fa-trash"></i> Hapus
             </button>
             
             <!-- Cancel Button -->
             <a href="artikel.php" class="btn-danger">
-                <i class="fas fa-times"></i> Cancel
+                <i class="fas fa-times"></i> Batal
             </a>
         </form>
     </div>

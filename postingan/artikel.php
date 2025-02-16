@@ -190,18 +190,18 @@ $jumlahArtikel = mysqli_num_rows($query);
     </section>
     <!-- tabel Artikel -->
     <div class="container">
-    <h3 style="margin-bottom: 1rem;">Add New Article</h3>
+    <h3 style="margin-bottom: 1rem;">Tambah Artikel Baru</h3>
         <form id="form-tambah-artikel" action="" method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="judul">Title <span class="text-danger">*</span></label>
+                <label for="judul">Judul <span class="text-danger">*</span></label>
                 <input type="text" id="judul" name="judul" required 
-                        placeholder="Enter article title">
+                        placeholder="Masukkan judul artikel">
             </div>
 
             <div class="form-group">
-                <label for="kategori">Category <span class="text-danger">*</span></label>
+                <label for="kategori">Kategori <span class="text-danger">*</span></label>
                 <select name="kategori" id="kategori" required>
-                    <option value="">Select One</option>
+                    <option value="">Pilih kategori</option>
                     <?php while ($data = mysqli_fetch_array($queryKategori)) { ?>
                         <option value="<?php echo $data['id']; ?>"><?php echo $data['nama']; ?></option>
                     <?php } ?>
@@ -209,19 +209,19 @@ $jumlahArtikel = mysqli_num_rows($query);
             </div>
 
             <div class="form-group">
-                <label for="isi">Content <span class="text-danger">*</span></label>
+                <label for="isi">Kontent <span class="text-danger">*</span></label>
                 <input id="article-content" type="hidden" name="isi">
-                <trix-editor input="article-content" class="trix-content" placeholder="Write your article content here"></trix-editor>
+                <trix-editor input="article-content" class="trix-content" placeholder="Tulis artikel kamu disini"></trix-editor>
             </div>
 
             <div class="form-group">
-                <label for="sinopsis">Synopsis <span class="text-danger">*</span></label>
+                <label for="sinopsis">Sinopsis <span class="text-danger">*</span></label>
                 <input id="article-synopsis" type="hidden" name="sinopsis">
-                <trix-editor input="article-synopsis" class="trix-content" placeholder="Write a brief summary of your article"></trix-editor>
+                <trix-editor input="article-synopsis" class="trix-content" placeholder="Tulis ringkasan artikel kamu"></trix-editor>
             </div>
 
             <div class="form-group">
-                <label for="gambar">Image</label>
+                <label for="gambar">Gambar</label>
                 <input type="file" id="gambar" name="gambar" 
                         accept="image/jpg,image/jpeg,image/png,image/gif"
                         onchange="previewImage(this)">
@@ -230,31 +230,31 @@ $jumlahArtikel = mysqli_num_rows($query);
             </div>
 
             <div class="form-group">
-                <button class="btn-primary" type="submit" name="simpan">Save</button>
-                <button class="btn-danger" type="button" onclick="window.print()">Print</button>
+                <button class="btn-primary" type="submit" name="simpan">Simpan</button>
+                <button class="btn-danger" type="button" onclick="window.print()">Cetak</button>
             </div>
         </form>
     </div>
 
     <div class="container">
-        <h2 style="margin-top: 1rem;">My Articles</h2>
+        <h2 style="margin-top: 1rem;">Artikel Saya</h2>
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Content</th>
-                        <th>Synopsis</th>
-                        <th>Image</th>
-                        <th>Created At</th>
-                        <th>Actions</th>
+                        <th>Judul</th>
+                        <th>Kategori</th>
+                        <th>Konten</th>
+                        <th>Sinopsis</th>
+                        <th>Gambar</th>
+                        <th>Dibuat pada</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if ($jumlahArtikel == 0) { ?>
-                        <tr><td colspan="8" class="text-center">No articles available</td></tr>
+                        <tr><td colspan="8" class="text-center">Tidak ada artikel ditemukan.</td></tr>
                     <?php } else {
                         $nomor = 1;
                         while ($data = mysqli_fetch_array($query)) { ?>
@@ -268,17 +268,17 @@ $jumlahArtikel = mysqli_num_rows($query);
                                     <?php if ($data['gambar']) { ?>
                                         <img src="../css/image/<?php echo $data['gambar']; ?>" class="article-image">
                                     <?php } else { ?>
-                                        <span class="text-muted">No image</span>
+                                        <span class="text-muted">Tidak ada gambar</span>
                                     <?php } ?>
                                 </td>
                                 <td class="timestamp"><?php echo $data['created_at']; ?></td>
                                 <td>
-                                    <a href="artikel-detail.php?p=<?php echo $data['id']; ?>" class="btn-info btn-sm">Show</a>
-                                    <a href="artikel-edit.php?p=<?php echo $data['id']; ?>" class="btn-warning btn-sm">Edit</a>
+                                    <a href="artikel-detail.php?p=<?php echo $data['id']; ?>" class="btn-info btn-sm">Lihat</a>
+                                    <a href="artikel-edit.php?p=<?php echo $data['id']; ?>" class="btn-warning btn-sm">Ubah</a>
                                     <form method="post" style="display:inline;">
                                         <input type="hidden" name="artikel_id" value="<?php echo $data['id']; ?>">
                                         <button type="submit" name="delete" class="btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus artikel ini?')">
-                                            Delete
+                                            Hapus
                                         </button>
                                     </form>
                                 </td>
