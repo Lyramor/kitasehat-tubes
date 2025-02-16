@@ -181,7 +181,7 @@ try {
         </a>
         <div class="navbar-nav">
         <a href="index.php#beranda">Beranda</a>
-        <a href="index.php#layanan">About Us</a>
+        <a href="index.php#layanan">Tentang Kami</a>
         <a href="index.php#artikel">Artikel</a>
         <a href="index.php#kontak">Kontak</a>
         <?php
