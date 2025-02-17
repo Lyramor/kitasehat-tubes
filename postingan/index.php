@@ -17,6 +17,20 @@ if(isset($_SESSION['id'])) {  // Sesuaikan dengan nama session yang Anda gunakan
 } else {
     $jumlahArtikel = 0; // Jika user belum login
 }
+
+function hitungArtikelArsip($conn, $user_id) {
+    $query = "SELECT COUNT(*) as total_arsip FROM artikel WHERE user_id = ? AND status = 'arsip'";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    return $row['total_arsip'];
+}
+$jumlahArtikelArsip = hitungArtikelArsip($conn, $user_id);
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -98,7 +112,7 @@ if(isset($_SESSION['id'])) {  // Sesuaikan dengan nama session yang Anda gunakan
                     </div>
                     <div class="text-section">
                         <h3>Arsip Artikel</h3>
-                        <p class="count">1 Artikel</p>
+                        <p class="count"><?= $jumlahArtikelArsip; ?> Artikel</p>
                         <p><a href="artikel-arsip.php">Lihat Detail</a></p>
                     </div>
                 </div>

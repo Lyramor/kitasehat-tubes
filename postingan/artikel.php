@@ -70,17 +70,17 @@ if (isset($_POST['simpan'])) {
 
     // Database insertion dengan status
     if (empty($error_message)) {
-      $queryTambah = mysqli_query($conn, "INSERT INTO artikel 
+        $queryTambah = mysqli_query($conn, "INSERT INTO artikel 
                                         (kategori_id, user_id, judul, isi, sinopsis, gambar, status) 
                                         VALUES 
                                         ('$kategori', '$user_id', '$judul', '$isi', '$sinopsis', '$new_name', 'aktif')");
 
-      if ($queryTambah) {
-          echo '<div class="alert alert-success">Article saved successfully</div>';
-          echo '<meta http-equiv="refresh" content="2">';
-      } else {
-          echo '<div class="alert alert-danger">Error: ' . mysqli_error($conn) . '</div>';
-      }
+        if ($queryTambah) {
+            echo '<div class="alert alert-success">Article saved successfully</div>';
+            echo '<meta http-equiv="refresh" content="2">';
+        } else {
+            echo '<div class="alert alert-danger">Error: ' . mysqli_error($conn) . '</div>';
+        }
     }
 }
 
@@ -234,12 +234,8 @@ $jumlahArtikel = mysqli_num_rows($query);
             padding: 8px;
         }
 
-        form .btn-action {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 600px;
-            margin: auto;
+        .btn-action{
+            margin-top: 1rem;
         }
     </style>
     <title>KitaSehat</title>
@@ -330,65 +326,71 @@ $jumlahArtikel = mysqli_num_rows($query);
     </div>
 
     <div class="container">
-    <h2 style="margin-top: 1rem;">My Articles</h2>
-      <div class="table-responsive">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th>No</th>
-                      <th>Judul</th>
-                      <th>Kategori</th>
-                      <th>Konten</th>
-                      <th>Sinopsis</th>
-                      <th>Gambar</th>
-                      <th>Dibuat</th>
-                      <th>Aksi</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <?php if ($jumlahArtikel == 0) { ?>
-                      <tr><td colspan="8" class="text-center">Tidak ada artikel yang tersedia</td></tr>
-                  <?php } else {
-                      $nomor = 1;
-                      while ($data = mysqli_fetch_array($query)) { ?>
-                          <tr>
-                              <td><?php echo $nomor++; ?></td>
-                              <td><?php echo $data['judul']; ?></td>
-                              <td><?php echo $data['nama_kategori']; ?></td>
-                              <td class="content-cell">
-                                  <?php echo bersihkanHTML($data['isi'], 100); ?>
-                              </td>
-                              <td class="synopsis-cell">
-                                  <?php echo bersihkanHTML($data['sinopsis'], 100); ?>
-                              </td>
-                              <td>
-                                  <?php if ($data['gambar']) { ?>
-                                      <img src="../css/image/<?php echo $data['gambar']; ?>" class="article-image">
-                                  <?php } else { ?>
-                                      <span class="text-muted">Tidak Ada Gambar</span>
-                                  <?php } ?>
-                              </td>
-                              <td class="timestamp"><?php echo $data['created_at']; ?></td>
-                              <td>
-                                  <form action="" style="display:inline;" class="btn-action">
-                                    <a href="artikel-detail.php?p=<?php echo $data['id']; ?>" class="btn-info btn-sm">Show</a>
-                                  </form>
-                                  <form action="" style="display:inline;" class="btn-action">
-                                    <a href="artikel-edit.php?p=<?php echo $data['id']; ?>" class="btn-warning btn-sm">Edit</a>
-                                  </form>                                  
-                                  <form method="post" style="display:inline;" class="btn-action">
-                                      <input type="hidden" name="artikel_id" value="<?php echo $data['id']; ?>">
-                                      <button type="submit" name="delete" class="btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus artikel ini?')">
-                                          Hapus
-                                      </button>
-                                  </form>
-                              </td>
-                          </tr>
-                      <?php }
-                  } ?>
-              </tbody>
-          </table>
-      </div>
+        <h2 style="margin-top: 1rem;">My Articles</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Judul</th>
+                        <th>Kategori</th>
+                        <th>Konten</th>
+                        <th>Sinopsis</th>
+                        <th>Gambar</th>
+                        <th>Dibuat</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($jumlahArtikel == 0) { ?>
+                        <tr><td colspan="8" class="text-center">Tidak ada artikel yang tersedia</td></tr>
+                    <?php } else {
+                        $nomor = 1;
+                        while ($data = mysqli_fetch_array($query)) { ?>
+                            <tr>
+                                <td><?php echo $nomor++; ?></td>
+                                <td><?php echo $data['judul']; ?></td>
+                                <td><?php echo $data['nama_kategori']; ?></td>
+                                <td class="content-cell">
+                                    <?php echo bersihkanHTML($data['isi'], 100); ?>
+                                </td>
+                                <td class="synopsis-cell">
+                                    <?php echo bersihkanHTML($data['sinopsis'], 100); ?>
+                                </td>
+                                <td>
+                                    <?php if ($data['gambar']) { ?>
+                                        <img src="../css/image/<?php echo $data['gambar']; ?>" class="article-image">
+                                    <?php } else { ?>
+                                        <span class="text-muted">Tidak Ada Gambar</span>
+                                    <?php } ?>
+                                </td>
+                                <td class="timestamp"><?php echo $data['created_at']; ?></td>
+                                <td>
+                                    <div class="btn-action">
+                                        <form action="" style="display:inline;">
+                                            <a href="artikel-detail.php?p=<?php echo $data['id']; ?>" class="btn-info btn-sm">Show</a>
+                                        </form>
+                                    </div>
+                                    <div class="btn-action">
+                                        <form action="" style="display:inline;">
+                                            <a href="artikel-edit.php?p=<?php echo $data['id']; ?>" class="btn-warning btn-sm">Edit</a>
+                                        </form>   
+                                    </div>
+                                    <div class="btn-action">
+                                        <form method="post" style="display:inline;">
+                                            <input type="hidden" name="artikel_id" value="<?php echo $data['id']; ?>">
+                                            <button type="submit" name="delete" class="btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus artikel ini?')">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php }
+                    } ?>
+                </tbody>
+            </table>
+        </div>
     </div>
     <!-- From Section end -->
 
